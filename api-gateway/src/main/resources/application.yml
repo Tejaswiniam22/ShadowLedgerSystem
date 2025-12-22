@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: event-service
+          uri: lb://event-service
+          predicates:
+            - Path=/events/**
+
+        - id: shadow-ledger-service
+          uri: lb://shadow-ledger-service
+          predicates:
+            - Path=/accounts/**
+
+        - id: drift-correction-service
+          uri: lb://drift-correction-service
+          predicates:
+            - Path=/drift-check/**,/correct/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.security: DEBUG
+    reactor.netty.http.server: DEBUG
+    com.shadowledger: DEBUG

@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.shadowledger'
+version = '0.0.1'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2024.0.0")
+}
+
+dependencies {
+    // 🌐 Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // 🗄 JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // 🧵 Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // ✅ Add Eureka Client
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    // 🐘 Postgres
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // ✨ Lombok (FIXES YOUR ERROR)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // 📊 Observability (required by assignment)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // 🧪 Tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}

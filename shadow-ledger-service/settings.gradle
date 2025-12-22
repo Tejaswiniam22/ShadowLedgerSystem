@@ -1,0 +1,2 @@
+rootProject.name = 'shadow-ledger-service'
+include 'kafka-contracts'

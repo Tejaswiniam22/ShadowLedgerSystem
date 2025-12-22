@@ -1,0 +1,62 @@
+   openapi: 3.0.1
+  info:
+    title: Shadow Ledger API
+    version: 1.0.0
+
+  paths:
+    /events:
+      post:
+        summary: Submit financial event
+        security:
+          - bearerAuth: []
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventRequest'
+        responses:
+          '202': { description: Accepted }
+
+    /accounts/{accountId}/shadow-balance:
+      get:
+        summary: Get shadow balance
+        security:
+          - bearerAuth: []
+        parameters:
+          - name: accountId
+            in: path
+            required: true
+            schema: { type: string }
+        responses:
+          '200': { description: Balance response }
+
+    /drift-check:
+      post:
+        summary: CBS drift check
+        security:
+          - bearerAuth: []
+
+    /correct/{accountId}:
+      post:
+        summary: Manual correction
+        security:
+          - bearerAuth: []
+
+  components:
+    securitySchemes:
+      bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+
+    schemas:
+      EventRequest:
+        type: object
+        required: [eventId, accountId, type, amount]
+        properties:
+          eventId: { type: string }
+          accountId: { type: string }
+          type: { type: string, enum: [debit, credit] }
+          amount: { type: number }
+          timestamp: { type: integer }

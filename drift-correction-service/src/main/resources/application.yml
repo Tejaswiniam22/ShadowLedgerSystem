@@ -1,0 +1,25 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: drift-correction-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ledgerdb
+    username: ledger
+    password: ledger
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+
+logging:
+  level:
+    root: INFO
+    com.shadowledger.drift: DEBUG
