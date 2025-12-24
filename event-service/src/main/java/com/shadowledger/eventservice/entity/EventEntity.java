@@ -20,8 +20,7 @@ public class EventEntity {
     private String type;
     private double amount;
     private Long timestamp;
-
-    // getters & setters
+        
     public Long getId() { return id; }
 
     public String getEventId() { return eventId; }
