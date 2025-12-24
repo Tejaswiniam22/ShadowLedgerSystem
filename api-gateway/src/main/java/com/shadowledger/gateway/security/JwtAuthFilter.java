@@ -30,7 +30,6 @@ public class JwtAuthFilter implements WebFilter {
 
         String path = exchange.getRequest().getPath().value();
 
-        // Allow token generation
         if (path.startsWith("/auth")) {
             return chain.filter(exchange);
         }
@@ -53,7 +52,6 @@ public class JwtAuthFilter implements WebFilter {
 
             String role = claims.get("role", String.class);
 
-            // 🔑 CREATE AUTHENTICATION
             List<GrantedAuthority> authorities =
                     List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
@@ -64,7 +62,6 @@ public class JwtAuthFilter implements WebFilter {
 
             log.info("Authenticated role={}", role);
 
-            // 🔥 PUT INTO SECURITY CONTEXT
             return chain.filter(exchange)
                     .contextWrite(
                             ReactiveSecurityContextHolder.withAuthentication(authentication)
