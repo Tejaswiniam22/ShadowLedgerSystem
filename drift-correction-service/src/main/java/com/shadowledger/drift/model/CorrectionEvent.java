@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class CorrectionEvent {
     private String eventId;
     private String accountId;
-    private String type; // credit / debit
+    private String type; 
     private BigDecimal amount;
     private Long timestamp;
 }
