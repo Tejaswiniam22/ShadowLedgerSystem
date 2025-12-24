@@ -31,7 +31,6 @@ class DriftDetectionTest {
         BigDecimal shadowBalance = BigDecimal.valueOf(700);
         BigDecimal reported = BigDecimal.valueOf(750);
 
-        // Mock repository response
         Mockito.when(repository.findBalance(accountId))
                 .thenReturn(Optional.of(new ShadowBalanceView(accountId, shadowBalance)));
 
@@ -39,10 +38,8 @@ class DriftDetectionTest {
         cbs.setAccountId(accountId);
         cbs.setReportedBalance(reported);
 
-        // Perform drift detection
         driftService.checkAndCorrect(cbs);
 
-        // Verify that a correction was published
         Mockito.verify(publisher, Mockito.times(1))
                 .publish(Mockito.argThat(e -> e.getAccountId().equals(accountId)
                         && e.getAmount().equals(BigDecimal.valueOf(50))
