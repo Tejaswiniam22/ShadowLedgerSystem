@@ -38,17 +38,14 @@ class ShadowLedgerServiceTest {
         debit.setEventId("E4");
         debit.setAccountId("A11");
         debit.setType(EventType.debit);
-        debit.setAmount(BigDecimal.valueOf(100)); // exceeds balance
+        debit.setAmount(BigDecimal.valueOf(100)); 
         debit.setTimestamp(Instant.now().plusSeconds(1));
 
         service.process(credit);
-
-        // Expect IllegalStateException
         IllegalStateException ex = assertThrows(IllegalStateException.class,
                 () -> service.process(debit));
         assertEquals("Negative balance not allowed", ex.getMessage());
 
-        // Balance should remain 50 after failed debit
         List<Object[]> result = repo.computeShadowBalance("A11");
         Object[] lastRow = result.get(result.size() - 1);
         BigDecimal balance = BigDecimal.ZERO;
@@ -68,16 +65,15 @@ class ShadowLedgerServiceTest {
         e1.setTimestamp(Instant.now());
 
         LedgerEntry duplicate = new LedgerEntry();
-        duplicate.setEventId("E5"); // same eventId
+        duplicate.setEventId("E5"); 
         duplicate.setAccountId("A12");
         duplicate.setType(EventType.credit);
         duplicate.setAmount(BigDecimal.valueOf(100));
         duplicate.setTimestamp(Instant.now().plusSeconds(1));
 
         service.process(e1);
-        service.process(duplicate); // should be ignored
+        service.process(duplicate); 
 
-        // Final balance should still be 100
         List<Object[]> result = repo.computeShadowBalance("A12");
         Object[] lastRow = result.get(result.size() - 1);
         BigDecimal balance = BigDecimal.ZERO;
