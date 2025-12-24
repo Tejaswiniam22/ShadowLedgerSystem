@@ -17,8 +17,6 @@ public class ShadowLedgerService {
     private final LedgerEntryRepository repo;
 
     public void process(LedgerEntry entry) {
-
-        // ✅ Idempotency
         if (repo.existsByEventId(entry.getEventId())) {
             return;
         }
@@ -33,12 +31,9 @@ public class ShadowLedgerService {
 
             if (result instanceof Object[]) {
                 Object[] outer = (Object[]) result;
-
-                // Case 1: [[accountId, balance, lastEvent]]
                 if (outer.length == 1 && outer[0] instanceof Object[]) {
                     row = (Object[]) outer[0];
                 }
-                // Case 2: [accountId, balance, lastEvent]
                 else {
                     row = outer;
                 }
@@ -49,13 +44,11 @@ public class ShadowLedgerService {
             }
         }
 
-        // ✅ Prevent negative balance
         if (entry.getType() == EventType.debit &&
                 balance.subtract(entry.getAmount()).signum() < 0) {
             throw new IllegalStateException("Negative balance not allowed");
         }
 
-        // ✅ Append-only
         repo.save(entry);
     }
 }
