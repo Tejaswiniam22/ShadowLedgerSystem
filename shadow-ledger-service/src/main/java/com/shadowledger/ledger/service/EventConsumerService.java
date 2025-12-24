@@ -27,10 +27,10 @@ public class EventConsumerService {
             entry.setEventId(request.getEventId());
             entry.setAccountId(request.getAccountId());
             entry.setType(EventType.valueOf(request.getType()));
-            entry.setAmount(request.getAmount()); // ⭐ Already BigDecimal
+            entry.setAmount(request.getAmount()); 
             entry.setTimestamp(Instant.ofEpochMilli(request.getTimestamp() != null
                     ? request.getTimestamp()
-                    : System.currentTimeMillis())); // ⭐ Handle null
+                    : System.currentTimeMillis())); 
 
             shadowLedgerService.process(entry);
 
