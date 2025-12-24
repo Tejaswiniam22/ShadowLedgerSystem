@@ -23,7 +23,6 @@ public class EventRequest {
     @NotNull
     private Long timestamp;
 
-    // getters & setters
     public String getEventId() { return eventId; }
     public void setEventId(String eventId) { this.eventId = eventId; }
 
